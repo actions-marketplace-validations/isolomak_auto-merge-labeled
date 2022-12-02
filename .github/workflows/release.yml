@@ -1,11 +1,7 @@
-name: 'build-test'
-on: # rebuild any PRs and main branch changes
-  pull_request:
+name: 'Release'
+on:
   push:
-    branches:
-      - main
-      - 'releases/*'
-
+    branches: [main]
 jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
@@ -20,5 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./
+  release:
+    needs:
+      - build
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare release
+        uses: google-github-actions/release-please-action@v3
         with:
-          milliseconds: 1000
+          release-type: node
+          package-name: release-please-action
+          labels: | 
+            autorelease: pending
