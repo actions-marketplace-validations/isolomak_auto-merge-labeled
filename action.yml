@@ -1,11 +1,27 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'auto-merge-labeled'
+description: 'Automatically merge labeled pull requests'
+author: 'Ivan Solomakhin'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    required: false
+    description: 'GitHub Secret Token'
+    default: '{{ secrets.GITHUB_TOKEN }}'
+  label:
+    required: false
+    description: 'The label that must be present to merge the pull request'
+    default: 'auto-merge'
+  commit-title:
+    required: false
+    description: 'The commit title to use when merging a pull request into the base branch'
+    default: 'Merge pull request #<pull-request-number> with auto-merge-labeled workflow action'
+  commit_message:
+    required: false
+    description: 'The commit message to use when merging a pull request into the base branch'
+    default: 'build(auto-merge-labeled): merge automatic pull request #<pull-request-number>'
+  merge_method:
+    required: false
+    description: 'Method to use when merging a pull request into the base branch (merge, rebase, squash)'
+    default: 'merge'
 runs:
   using: 'node16'
   main: 'dist/index.js'
