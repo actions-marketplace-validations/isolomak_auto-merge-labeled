@@ -5,7 +5,7 @@ import { DEFAULT_MERGE_LABEL } from './types/constants';
 
 async function run(): Promise<void> {
 	try {
-		const token = getInput('token') || process.env.GITHUB_TOKEN;
+		const token = process.env.GITHUB_TOKEN;
 		const label = getInput('label') || DEFAULT_MERGE_LABEL;
 
 		const commitTitle = getInput('commit-title');
@@ -13,11 +13,11 @@ async function run(): Promise<void> {
 		const mergeMethod = getInput('merge-method');	
 
 		if (!token) {
-			throw new Error(`GitHub Secret Token is missing`);
+			throw new Error(`GITHUB_TOKEN env variable is missing`);
 		}
 
-		if (!token) {
-			throw new Error(`Label is missing`);
+		if (!label) {
+			throw new Error(`Label input is missing`);
 		}
 
 		const octokit = getOctokit(token);
