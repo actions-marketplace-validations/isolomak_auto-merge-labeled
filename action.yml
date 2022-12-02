@@ -2,9 +2,6 @@ name: 'auto-merge-labeled'
 description: 'Automatically merge labeled pull requests'
 author: 'Ivan Solomakhin'
 inputs:
-  token:
-    required: false
-    description: 'GitHub Secret Token'
   label:
     required: false
     description: 'The label that must be present to merge the pull request'
