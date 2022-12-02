@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "auto-merge-labeled",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "A github action to automatically merge labeled pull requests",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,22 +15,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/IvanSolomakhin/auto-merge-labeled.git"
   },
   "keywords": [
-    "actions",
-    "node",
-    "setup"
+    "auto",
+    "merge",
+    "label",
+    "labeled"
   ],
-  "author": "",
+  "author": "Ivan Solomakhin",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.10.0"
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.10",
-    "@typescript-eslint/parser": "^4.33.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
     "@vercel/ncc": "^0.34.0",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.28.0",
     "eslint-plugin-github": "^4.4.1",
     "eslint-plugin-jest": "^27.1.6",
@@ -39,5 +43,10 @@
     "prettier": "2.5.1",
     "ts-jest": "^27.1.2",
     "typescript": "^4.9.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
