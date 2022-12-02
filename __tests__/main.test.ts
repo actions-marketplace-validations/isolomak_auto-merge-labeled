@@ -1,29 +1,58 @@
-import {wait} from '../src/wait'
-import * as process from 'process'
-import * as cp from 'child_process'
-import * as path from 'path'
-import {expect, test} from '@jest/globals'
+import { Context } from '@actions/github/lib/context';
+import { GitHub } from '@actions/github/lib/utils';
+import { beforeEach, expect, jest, test } from '@jest/globals';
+import { executeAction } from '../src/action';
+import { DEFAULT_MERGE_LABEL } from '../src/types/constants';
 
-test('throws invalid number', async () => {
-  const input = parseInt('foo', 10)
-  await expect(wait(input)).rejects.toThrow('milliseconds not a number')
-})
+let octokit: InstanceType<typeof GitHub>;
+let context: Context;
 
-test('wait 500 ms', async () => {
-  const start = new Date()
-  await wait(500)
-  const end = new Date()
-  var delta = Math.abs(end.getTime() - start.getTime())
-  expect(delta).toBeGreaterThan(450)
-})
+const givenPullRequest = { number: 123, title: 'Test PR', labels: [{ name: 'auto-merge' }, { name: 'test-merge' }] };
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  process.env['INPUT_MILLISECONDS'] = '500'
-  const np = process.execPath
-  const ip = path.join(__dirname, '..', 'lib', 'main.js')
-  const options: cp.ExecFileSyncOptions = {
-    env: process.env
-  }
-  console.log(cp.execFileSync(np, [ip], options).toString())
-})
+beforeEach(() => {
+	octokit = {
+		rest: {
+			pulls: {
+				merge: jest.fn(() => {}),
+				list: () => {
+					return {
+						data: [
+							Object.assign({}, givenPullRequest)
+						]
+					}
+				}
+			}
+		}
+	} as unknown as InstanceType<typeof GitHub>;
+	context = {
+		repo: {
+			owner: 'test-owner',
+			'repo': 'test-repo'
+		}
+	} as Context;
+});
+
+test('should merge pull request with default params', async () => {
+	// WHEN
+	await executeAction(context, octokit, { label: DEFAULT_MERGE_LABEL });
+
+	//THEN
+	await expect(octokit.rest.pulls.merge).toHaveBeenCalledWith(
+		expect.objectContaining({
+			owner: context.repo.owner,
+			repo: context.repo.repo,
+			pull_number: 123,
+			commit_title: `Merge pull request #123 with auto-merge-labeled workflow action`,
+			commit_message: `build(auto-merge-labeled): automatic pull request #123 merge`,
+			merge_method: 'merge'
+		})
+	);
+});
+
+test('should skip merge pull request without label', async () => {
+	// WHEN
+	await executeAction(context, octokit, { label: 'non_existent_label' });
+
+	//THEN
+	await expect(octokit.rest.pulls.merge).toBeCalledTimes(0);
+});
