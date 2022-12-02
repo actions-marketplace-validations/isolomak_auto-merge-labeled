@@ -22,7 +22,7 @@ jobs:
     steps:
       - id: auto-merge-labeled
         name: Auto merge labeled
-        uses: isolomak/auto-merge-labeled@latest
+        uses: isolomak/auto-merge-labeled@v1.0.0
         with:
           label: 'auto-merge'
         env:
@@ -43,6 +43,7 @@ The `auto-merge-labeled` action supports all triggers
 ## Changelog
 
 [Changelog](./CHANGELOG)
+
 [List of releases](https://github.com/isolomak/auto-merge-labeled/releases)
 
 ## License
