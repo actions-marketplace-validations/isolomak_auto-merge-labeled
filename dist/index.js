@@ -80,16 +80,16 @@ const constants_1 = __nccwpck_require__(8782);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const token = (0, core_1.getInput)('token') || process.env.GITHUB_TOKEN;
+            const token = process.env.GITHUB_TOKEN;
             const label = (0, core_1.getInput)('label') || constants_1.DEFAULT_MERGE_LABEL;
             const commitTitle = (0, core_1.getInput)('commit-title');
             const commitMessage = (0, core_1.getInput)('commit-message');
             const mergeMethod = (0, core_1.getInput)('merge-method');
             if (!token) {
-                throw new Error(`GitHub Secret Token is missing`);
+                throw new Error(`GITHUB_TOKEN env variable is missing`);
             }
-            if (!token) {
-                throw new Error(`Label is missing`);
+            if (!label) {
+                throw new Error(`Label input is missing`);
             }
             const octokit = (0, github_1.getOctokit)(token);
             yield (0, action_1.executeAction)(github_1.context, octokit, { label, commitTitle, commitMessage, mergeMethod });
