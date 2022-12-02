@@ -5,7 +5,7 @@ inputs:
   token:
     required: false
     description: 'GitHub Secret Token'
-    default: '{{ secrets.GITHUB_TOKEN }}'
+    default: '${{ secrets.GITHUB_TOKEN }}'
   label:
     required: false
     description: 'The label that must be present to merge the pull request'
