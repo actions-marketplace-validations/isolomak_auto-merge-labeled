@@ -1,6 +1,6 @@
 {
   "name": "auto-merge-labeled",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "A github action to automatically merge labeled pull requests",
   "main": "lib/main.js",
